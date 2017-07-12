@@ -7,8 +7,13 @@
 //
 
 #import "ViewController.h"
+#import "PhotoView.h"
+
+
 
 @interface ViewController ()
+
+
 
 @end
 
@@ -16,14 +21,24 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    
+
+   
+    
+    
+    [self setUserInterface];
+   
 }
 
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)setUserInterface
+{
+    PhotoView * view = [[PhotoView alloc] initWithFrame:self.view.bounds completeHandle:^{
+        NSLog(@"1234567890");
+    }];
+    [self.view addSubview:view];
+    [view start];
 }
-
 
 @end

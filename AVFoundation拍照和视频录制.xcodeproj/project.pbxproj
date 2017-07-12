@@ -15,6 +15,8 @@
 		FF27A47F1F15EDE90063F7EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FF27A47D1F15EDE90063F7EA /* LaunchScreen.storyboard */; };
 		FF27A48A1F15EDE90063F7EA /* AVFoundation_______Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF27A4891F15EDE90063F7EA /* AVFoundation_______Tests.m */; };
 		FF27A4951F15EDEA0063F7EA /* AVFoundation_______UITests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF27A4941F15EDEA0063F7EA /* AVFoundation_______UITests.m */; };
+		FF27A4A41F15EDFA0063F7EA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF27A4A31F15EDFA0063F7EA /* AVFoundation.framework */; };
+		FF27A4A71F1609FB0063F7EA /* PhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = FF27A4A61F1609FB0063F7EA /* PhotoView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,9 @@
 		FF27A4901F15EDEA0063F7EA /* AVFoundation拍照和视频录制UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AVFoundation拍照和视频录制UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF27A4941F15EDEA0063F7EA /* AVFoundation_______UITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AVFoundation_______UITests.m"; sourceTree = "<group>"; };
 		FF27A4961F15EDEA0063F7EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FF27A4A31F15EDFA0063F7EA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		FF27A4A51F1609FB0063F7EA /* PhotoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoView.h; sourceTree = "<group>"; };
+		FF27A4A61F1609FB0063F7EA /* PhotoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF27A4A41F15EDFA0063F7EA /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,6 +91,7 @@
 				FF27A4881F15EDE90063F7EA /* AVFoundation拍照和视频录制Tests */,
 				FF27A4931F15EDEA0063F7EA /* AVFoundation拍照和视频录制UITests */,
 				FF27A46D1F15EDE90063F7EA /* Products */,
+				FF27A4A21F15EDFA0063F7EA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -110,6 +117,8 @@
 				FF27A47D1F15EDE90063F7EA /* LaunchScreen.storyboard */,
 				FF27A4801F15EDE90063F7EA /* Info.plist */,
 				FF27A46F1F15EDE90063F7EA /* Supporting Files */,
+				FF27A4A51F1609FB0063F7EA /* PhotoView.h */,
+				FF27A4A61F1609FB0063F7EA /* PhotoView.m */,
 			);
 			path = "AVFoundation拍照和视频录制";
 			sourceTree = "<group>";
@@ -138,6 +147,14 @@
 				FF27A4961F15EDEA0063F7EA /* Info.plist */,
 			);
 			path = "AVFoundation拍照和视频录制UITests";
+			sourceTree = "<group>";
+		};
+		FF27A4A21F15EDFA0063F7EA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FF27A4A31F15EDFA0063F7EA /* AVFoundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -279,6 +296,7 @@
 				FF27A4771F15EDE90063F7EA /* ViewController.m in Sources */,
 				FF27A4741F15EDE90063F7EA /* AppDelegate.m in Sources */,
 				FF27A4711F15EDE90063F7EA /* main.m in Sources */,
+				FF27A4A71F1609FB0063F7EA /* PhotoView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
