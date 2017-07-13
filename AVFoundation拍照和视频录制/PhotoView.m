@@ -19,6 +19,9 @@ typedef void(^CompleteHandle)(UIImage * photo);
 @property (nonatomic, strong)AVCaptureDeviceInput * deviceInput;
 /**AVCaptureOutput*/
 @property (nonatomic, strong)AVCapturePhotoOutput * photoOutput;
+
+@property (nonatomic, strong)AVCaptureDevice * device;
+
 @property (nonatomic, copy)CompleteHandle completeHandle;
 @end
 
@@ -75,8 +78,11 @@ typedef void(^CompleteHandle)(UIImage * photo);
         [self.captureSession setSessionPreset:AVCaptureSessionPreset1920x1080];
     }
     
-    AVCaptureDevice * device = [self cameraDeviceWithPosition:AVCaptureDevicePositionBack];
-    self.deviceInput = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
+    self.device = [self cameraDeviceWithPosition:AVCaptureDevicePositionBack];
+    
+    [self deviceFouceModeForType:AVCaptureFocusModeContinuousAutoFocus];
+    
+    self.deviceInput = [AVCaptureDeviceInput deviceInputWithDevice:self.device error:nil];
     self.photoOutput = [[AVCapturePhotoOutput alloc] init];
     
     
@@ -144,28 +150,26 @@ typedef void(^CompleteHandle)(UIImage * photo);
 {
     if (sender.tag == 100) {
         // 自动
+        [self deviceTorModeForType:AVCaptureTorchModeAuto];
     }
     if (sender.tag == 101) {
-        // 开启
+       [self deviceTorModeForType:AVCaptureTorchModeOn];
     }
     if (sender.tag == 102) {
-        // 关闭
+        [self deviceTorModeForType:AVCaptureTorchModeOff];
     }
     if (sender.tag == 200) {
         // 调换摄像头
-        [self changeCaremaMode];
+        [self switchingCamera];
     }
 }
 
 
 
-- (void)changeCaremaMode
+- (void)switchingCamera
 {
-
     AVCaptureDevicePosition currentPosition =  self.deviceInput.device.position;
-
     AVCaptureDevice * device;
-    
     if (currentPosition == AVCaptureDevicePositionBack) {
         if ([self.captureSession canSetSessionPreset:AVCaptureSessionPreset1280x720]) {
             [self.captureSession setSessionPreset:AVCaptureSessionPreset1280x720];
@@ -183,11 +187,37 @@ typedef void(^CompleteHandle)(UIImage * photo);
     [self.captureSession beginConfiguration];
     [self.captureSession removeInput:self.deviceInput];
     if ([self.captureSession canAddInput:deviceInput]) {
-
         [self.captureSession addInput:deviceInput];
         self.deviceInput = deviceInput;
+        self.device = device;
     }
+    [self deviceFouceModeForType:AVCaptureFocusModeContinuousAutoFocus];
     [self.captureSession commitConfiguration];
+}
 
+
+- (void)deviceTorModeForType:(AVCaptureTorchMode)type
+{
+    if ([self.device hasTorch]) {
+        BOOL locked = [self.device lockForConfiguration:nil];
+        if (locked) {
+            // 开启
+            self.device.torchMode = type;
+            [self.device unlockForConfiguration];
+        }
+    }
+}
+
+
+- (void)deviceFouceModeForType:(AVCaptureFocusMode)type
+{
+    if ([self.device isFocusModeSupported:type]) {
+        BOOL locked = [self.device lockForConfiguration:nil];
+        if (locked) {
+            // 开启
+            self.device.focusMode = type;
+            [self.device unlockForConfiguration];
+        }
+    }
 }
 @end
