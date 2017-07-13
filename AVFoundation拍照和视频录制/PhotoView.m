@@ -11,7 +11,7 @@
 
 
 
-typedef void(^CompleteHandle)(void);
+typedef void(^CompleteHandle)(UIImage * photo);
 @interface PhotoView ()<AVCapturePhotoCaptureDelegate>
 
 @property (nonatomic, strong) AVCaptureSession * captureSession;
@@ -25,8 +25,7 @@ typedef void(^CompleteHandle)(void);
 
 @implementation PhotoView
 
-- (instancetype)initWithFrame:(CGRect)frame completeHandle:(void (^)())completeHandle
-{
+- (instancetype)initWithFrame:(CGRect)frame completeHandle:(void (^)(UIImage *))completeHandle{
     if (self = [super initWithFrame:frame]) {
         self.completeHandle = completeHandle;
         [self configCamera];
@@ -38,15 +37,33 @@ typedef void(^CompleteHandle)(void);
 
 - (void)setUserInterface
 {
+    NSArray * leftBtnTitles = @[@"auto",@"open",@"close"];
+    CGFloat btnSize = 30.f;
+    CGFloat width = self.bounds.size.width;
+    CGFloat height = self.bounds.size.height;
+    CGFloat margin = 30.f;
+
+    for (int i = 0; i < leftBtnTitles.count; i ++) {
+        UIButton * button = [[UIButton alloc] initWithFrame:CGRectMake(10, (margin + btnSize) * i + margin , btnSize, btnSize)];
+        [button setImage:[UIImage imageNamed:leftBtnTitles[i]] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        button.tag = 100 + i;
+        [self addSubview:button];
+    }
+    NSArray * rightBtnTitles = @[@"change"];
+    for (int i = 0; i < rightBtnTitles.count; i ++) {
+        UIButton * button = [[UIButton alloc] initWithFrame:CGRectMake(width - btnSize - 10, (margin + btnSize) * i + margin , btnSize, btnSize)];
+        [button setImage:[UIImage imageNamed:rightBtnTitles[i]] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+         button.tag = 200 + i;
+        [self addSubview:button];
+    }
+    
+    
+    
     UIButton *takeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    takeButton.frame = CGRectMake((self.bounds.size.width - 70) / 2, self.bounds.size.height - 90, 70, 70);
-    takeButton.layer.masksToBounds = YES;
-    takeButton.layer.cornerRadius = takeButton.frame.size.height / 2;
-    takeButton.backgroundColor = [UIColor colorWithWhite:1 alpha:0.7];
-    [takeButton setTitle:@"拍照" forState:UIControlStateNormal];
-    takeButton.titleLabel.font = [UIFont systemFontOfSize:16];
-    takeButton.titleLabel.numberOfLines = 0;
-    [takeButton setTitleColor:[UIColor colorWithRed:40.2f/255 green:180.2f/255 blue:247.2f/255 alpha:0.9] forState:UIControlStateNormal];
+    takeButton.frame = CGRectMake((width - 60) / 2, height - 70, 60, 60);
+    [takeButton setImage:[UIImage imageNamed:@"carema"] forState:UIControlStateNormal];
     [takeButton addTarget:self action:@selector(takePhoto) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:takeButton];
 }
@@ -54,6 +71,10 @@ typedef void(^CompleteHandle)(void);
 - (void)configCamera
 {
     self.captureSession = [[AVCaptureSession alloc] init];
+    if ([self.captureSession canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {
+        [self.captureSession setSessionPreset:AVCaptureSessionPreset1920x1080];
+    }
+    
     AVCaptureDevice * device = [self cameraDeviceWithPosition:AVCaptureDevicePositionBack];
     self.deviceInput = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
     self.photoOutput = [[AVCapturePhotoOutput alloc] init];
@@ -112,10 +133,61 @@ typedef void(^CompleteHandle)(void);
 }
 - (void)image: (UIImage *) image didFinishSavingWithError: (NSError *) error contextInfo: (void *) contextInfo {
     if(!error){
-        self.completeHandle();
+        self.completeHandle(image);
     
     }
     
 }
 
+
+- (void)btnClick:(UIButton *)sender
+{
+    if (sender.tag == 100) {
+        // 自动
+    }
+    if (sender.tag == 101) {
+        // 开启
+    }
+    if (sender.tag == 102) {
+        // 关闭
+    }
+    if (sender.tag == 200) {
+        // 调换摄像头
+        [self changeCaremaMode];
+    }
+}
+
+
+
+- (void)changeCaremaMode
+{
+
+    AVCaptureDevicePosition currentPosition =  self.deviceInput.device.position;
+
+    AVCaptureDevice * device;
+    
+    if (currentPosition == AVCaptureDevicePositionBack) {
+        if ([self.captureSession canSetSessionPreset:AVCaptureSessionPreset1280x720]) {
+            [self.captureSession setSessionPreset:AVCaptureSessionPreset1280x720];
+        }
+        device = [self cameraDeviceWithPosition:AVCaptureDevicePositionFront];
+    }
+    if (currentPosition ==  AVCaptureDevicePositionFront) {
+        if ([self.captureSession canSetSessionPreset:AVCaptureSessionPreset1920x1080]) {
+            [self.captureSession setSessionPreset:AVCaptureSessionPreset1920x1080];
+        }
+        device = [self cameraDeviceWithPosition:AVCaptureDevicePositionBack];
+    }
+    AVCaptureDeviceInput * deviceInput = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
+    
+    [self.captureSession beginConfiguration];
+    [self.captureSession removeInput:self.deviceInput];
+    if ([self.captureSession canAddInput:deviceInput]) {
+
+        [self.captureSession addInput:deviceInput];
+        self.deviceInput = deviceInput;
+    }
+    [self.captureSession commitConfiguration];
+
+}
 @end

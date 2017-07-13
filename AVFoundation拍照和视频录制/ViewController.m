@@ -34,8 +34,8 @@
 
 - (void)setUserInterface
 {
-    PhotoView * view = [[PhotoView alloc] initWithFrame:self.view.bounds completeHandle:^{
-        NSLog(@"1234567890");
+    PhotoView * view = [[PhotoView alloc] initWithFrame:self.view.bounds completeHandle:^(UIImage * photo){
+        NSLog(@"%@",photo);
     }];
     [self.view addSubview:view];
     [view start];

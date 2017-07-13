@@ -21,7 +21,7 @@
 @interface PhotoView : UIView
 
 
-- (instancetype)initWithFrame:(CGRect)frame completeHandle:(void (^)())completeHandle;
+- (instancetype)initWithFrame:(CGRect)frame completeHandle:(void (^)(UIImage * photo))completeHandle;
 
 
 
